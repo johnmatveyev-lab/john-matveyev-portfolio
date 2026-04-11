@@ -1,0 +1,13 @@
+project_id = "ucwcirqkwrsxnedbpizr"
+
+[functions.generate-idea]
+verify_jwt = false
+
+[functions.generate-mockup]
+verify_jwt = false
+
+[functions.generate-pages]
+verify_jwt = false
+
+[functions.admin-submissions]
+verify_jwt = false
