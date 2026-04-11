@@ -20,6 +20,8 @@ export interface Project {
   gradient?: "blue" | "violet" | "emerald" | "pink";
   category?: string;
   iconName?: string;
+  architectureDiagram?: string;
+  technicalChallenges?: string[];
 }
 
 export interface ProjectMetric {

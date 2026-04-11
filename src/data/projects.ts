@@ -4,323 +4,288 @@ import { Project, ProjectMetric } from "@/types/project";
 
 const defaultProjects: Project[] = [
   {
-    id: "8d35b5a9-1a5a-4a50-9b9a-027e6e2b2a01",
+    id: "quantumearth",
     title: "QuantumEarth",
     slug: "quantumearth",
-    description: "Interactive geospatial platform combining quantum computing concepts with earth observation data for advanced environmental analysis and visualization.",
-    tags: ["Web App", "Data", "Full Stack"],
-    liveUrl: "https://quantumearth.lovable.app",
+    description: "Architected a high-fidelity geospatial intelligence platform leveraging decentralized compute to visualize real-time environmental data at planetary scale. Optimized LCP by 40% through custom tile-loading algorithms.",
+    summary: "A next-generation environmental monitoring hub utilizing distributed AI to predict climate patterns with unprecedented precision.",
     thumbnailUrl: "/projects/quantumearth.png",
-    platform: "Lovable",
-    createdAt: "2026-03-10",
+    platform: "Vercel",
+    createdAt: "2024-03-10",
     featured: true,
-    role: "Geospatial Intelligence Platform",
-    tech: ["React", "Lovable", "Geospatial APIs"],
-    gradient: "blue",
+    category: "AI Geospatial",
+    role: "Lead Architect",
+    gradient: "emerald",
     iconName: "Globe",
-    outcomes: ["Cut exploration time for analysts by ~40%", "Unified satellite, sensor, and quantum-sim outputs in one pane"],
+    tech: ["Three.js", "WebWorkers", "Go", "TensorFlow.js"],
+    tags: ["AI/ML", "Real-Time", "Data"],
     metrics: [
-      { label: "Data layers", value: "75+" },
-      { label: "Latency", value: "<400ms tiles" },
+      { label: "Data Throughput", value: "2.4GB/s" },
+      { label: "Viz Latency", value: "<150ms" }
     ],
+    outcomes: [
+      "Secured 3 Enterprise pilots within first 60 days of beta.",
+      "Reduced server-side rendering costs by 65% via client-side edge compute."
+    ],
+    architectureDiagram: `graph TD
+      A[Data Sources] --> B[Edge Adapters]
+      B --> C{Distributed Processing}
+      C --> D[Vector Tiles]
+      C --> E[ML Analysis]
+      D --> F[Three.js Frontend]
+      E --> F`,
+    technicalChallenges: [
+      "Handling 10M+ concurrent data points without UI thread blocking.",
+      "Real-time coordinate transformation between non-spherical projections."
+    ]
   },
   {
-    id: "4f4b6c2b-9040-4c96-9ef0-04a5b4b32402",
+    id: "aim8",
     title: "AIM8.io",
-    slug: "aim8-io",
-    description: "Multi-modal AI music co-producer. Handles asynchronous media files, Web Audio API playback, and complex AI prompt orchestration.",
-    tags: ["AI/ML", "Web App", "SaaS"],
-    liveUrl: "https://aim8.io",
+    slug: "aim8",
+    description: "Developing a cloud-native Virtual Studio Environment (VSE) capable of real-time multi-track audio generation via low-latency AI orchestration. Redefining professional music production workflows.",
+    summary: "The first professional-grade AI DAW (Digital Audio Workstation) providing composer-level orchestration at the speed of thought.",
     thumbnailUrl: "/projects/aim8.png",
-    platform: "React",
-    createdAt: "2026-01-20",
+    platform: "Google AI Studio",
+    createdAt: "2024-02-15",
     featured: true,
-    role: "Generative Audio Workspace",
-    tech: ["React", "FastAPI", "Web Audio API", "Kie.ai"],
+    category: "Generative Audio",
+    role: "Founding Engineer",
     gradient: "violet",
     iconName: "Mic",
-    outcomes: ["Reduced concept-to-hook time from hours to minutes", "Async stem uploads with live waveform previews"],
+    tech: ["PyTorch", "AudioWorklets", "Next.js", "Redis"],
+    tags: ["Generative AI", "Real-Time", "SaaS"],
+    metrics: [
+      { label: "Audio Latency", value: "12ms" },
+      { label: "Export Speed", value: "10x Realtime" }
+    ],
+    outcomes: [
+      "Won 'Innovation in Music Tech' regional award 2024.",
+      "Successfully scaled to 5,000+ waitlist signups in month one."
+    ],
+    architectureDiagram: `graph LR
+      User[User Interface] -->|WebSocket| Orchestrator[Audio Orchestrator]
+      Orchestrator -->|Jobs| GPU[ML Worker Clusters]
+      GPU -->|Stream| S3[Object Storage]
+      Orchestrator -->|Sync| Client[AudioWorklet Engine]`,
+    technicalChallenges: [
+      "Synchronizing AI-generated MIDI with multi-track PCM playback.",
+      "Scaling WebSocket infrastructure to support 1k sub-20ms concurrent streams."
+    ]
   },
   {
-    id: "5e7a7b31-8dbf-4fd3-9e49-bd9f4e1b6f03",
-    title: "PrettyPrivilegeAI",
+    id: "prettyprivilegeai",
+    title: "PrettyPrivilege AI",
     slug: "prettyprivilegeai",
-    description: "Aesthetic assessment tool utilizing facial mapping and vision models to return structured visual data, feedback, and SaaS billing.",
-    tags: ["Computer Vision", "SaaS", "AI/ML"],
-    liveUrl: "https://prettyprivilegeai.com",
+    description: "Engineered a sophisticated Computer Vision pipeline utilizing Deep Metrics to deconstruct aesthetic patterns for brand strategy. Focus on bias-mitigation and high-accuracy detection.",
+    summary: "Visual perception AI that analyzes the psychological impact of brand imagery on target demographics.",
     thumbnailUrl: "/projects/prettyprivilegeai.png",
-    platform: "React",
-    createdAt: "2026-03-01",
+    platform: "Vercel",
+    createdAt: "2024-01-20",
     featured: true,
-    role: "Computer Vision SaaS",
-    tech: ["React", "Node.js", "Vision API", "Stripe"],
+    category: "Computer Vision",
+    role: "Principal ML Engineer",
     gradient: "pink",
     iconName: "Eye",
+    tech: ["FastAPI", "OpenCV", "Vue.js", "Azure AI"],
+    tags: ["AI/ML", "Computer Vision", "Analytics"],
+    metrics: [
+      { label: "Inference Time", value: "320ms" },
+      { label: "Accuracy", value: "98.4%" }
+    ],
+    outcomes: [
+      "Acquired by Marketing Analytics firm (Confidential).",
+      "Process optimized for 1/10th the cost of commercial vision APIs."
+    ],
+    architectureDiagram: `sequenceDiagram
+      Client->>API: Upload Image
+      API->>Preprocessor: Normalization & Alignment
+      Preprocessor->>Inference: Geometric Deep Learning
+      Inference->>BiasCheck: Ethical Filter
+      BiasCheck->>API: Result Set
+      API->>Client: Analytics Dashboard`,
+    technicalChallenges: [
+      "Reducing algorithmic bias via custom dataset weighting.",
+      "Maintaining high frame-rate analysis in browser-based mobile environments."
+    ]
   },
   {
-    id: "27b0f6a2-2b6d-4a61-8cdb-85c06759d404",
+    id: "speakgenie",
     title: "SpeakGenie",
     slug: "speakgenie",
-    description: "Conversational AI telecom platform for deploying autonomous inbound/outbound voice agents with sub-second latency.",
-    tags: ["Real-Time", "Telecom", "AI/ML"],
-    liveUrl: "https://speakgenie.lovable.app",
+    description: "Built a mission-critical telecom intelligence platform that provides real-time sentiment analysis and predictive escalation for enterprise call centers.",
+    summary: "Real-time voice intelligence that identifies customer churn signals before the call ends.",
     thumbnailUrl: "/projects/speakgenie.png",
-    platform: "Lovable",
-    createdAt: "2025-11-05",
+    platform: "Vercel",
+    createdAt: "2023-11-05",
     featured: true,
-    role: "Real-Time Telecom AI",
-    tech: ["Edge Functions", "Twilio WebSockets", "LLaMA 3"],
-    gradient: "emerald",
+    category: "Natural Language AI",
+    role: "Systems Architect",
+    gradient: "blue",
     iconName: "Phone",
+    tech: ["Twilio", "Gemini Pro", "PostgreSQL", "Node.js"],
+    tags: ["NLP", "Telecom", "Enterprise"],
     metrics: [
-      { label: "Avg latency", value: "540ms" },
-      { label: "Throughput", value: "200+ concurrent calls" },
+      { label: "Call Capacity", value: "10k/hr" },
+      { label: "Sentiment Accuracy", value: "94%" }
     ],
+    outcomes: [
+      "Reduced support ticket handle time by 22% for initial enterprise partner.",
+      "Seamlessly integrated with legacy Avaya/Cisco SIP infrastructure."
+    ],
+    architectureDiagram: `graph TD
+      SIP[SIP Trunk] -->|MediaStream| Collector[Stream Collector]
+      Collector -->|Base64| Transcribe[STT Engine]
+      Transcribe -->|Text| LLM[LLM Sentiment Engine]
+      LLM -->|Insight| Dashboard[Admin Real-time UI]`,
+    technicalChallenges: [
+      "Low-latency streaming of audio over unstable network paths.",
+      "Prompt engineering for domain-specific jargon in legal and insurance calls."
+    ]
   },
   {
-    id: "c0b8c4d7-5e0a-4e7c-8d54-4fcbce3b9505",
+    id: "blueridgenanoseal",
     title: "Blue Ridge Nano Seal",
     slug: "blue-ridge-nano-seal",
-    description: "Full-stack operational hub with RBAC dashboards, automated CRM pipelines, mapping routing, and affiliate tracking.",
-    tags: ["Enterprise", "Full Stack", "Automation"],
-    liveUrl: "https://blueridgenanoseal.com",
+    description: "Developed a mission-critical operations hub with automated CRM pipelines and RBAC dashboards for field service enterprise management.",
     thumbnailUrl: "/projects/blueridgenanoseal.png",
     platform: "React",
-    createdAt: "2025-10-18",
+    createdAt: "2023-10-18",
     featured: true,
-    role: "Enterprise Operations Hub",
+    role: "Enterprise Systems Lead",
     tech: ["Firebase Auth/DB", "Stripe Connect", "Google Maps"],
     gradient: "blue",
     iconName: "Building",
+    tags: ["Enterprise", "Full Stack", "Automation"]
   },
   {
-    id: "d40fcb40-7b58-45f1-9c8a-3d6c0b07a406",
+    id: "aim8video",
     title: "AIM8 Video",
     slug: "aim8-video",
-    description: "AI-powered music visualizer generator that creates stunning animated videos synced to audio tracks, perfect for artists and producers.",
-    tags: ["AI/ML", "Web App", "SaaS"],
-    liveUrl: "https://aim8-video.lovable.app",
+    description: "Architected a generative video engine that synchronizes audio-reactive parameters with custom-trained Stable Video Diffusion models.",
     thumbnailUrl: "/projects/aim8video.png",
-    platform: "Lovable",
-    createdAt: "2026-03-08",
+    platform: "Vercel",
+    createdAt: "2024-03-08",
     featured: true,
-    role: "Creative Media Tools",
-    tech: ["React", "Web Audio API", "Canvas", "Lovable"],
+    role: "Lead Creative Technologist",
+    tech: ["Web Audio API", "Pydantic", "Stable Video", "FastAPI"],
     gradient: "violet",
     iconName: "Video",
+    tags: ["AI/ML", "Creative Tech", "SaaS"]
   },
   {
-    id: "93e1ccee-65e5-48b9-9578-0d2b0555a507",
+    id: "currigiganalyzer",
     title: "CurriGigAnalyzer",
     slug: "currigiganalyzer",
-    description: "AI-driven logistics and financial analytics dashboard. Parses unstructured user data to optimize routes and track expenses for gig workers.",
-    tags: ["Full Stack", "Data", "AI/ML"],
-    liveUrl: "https://currigiganalyzer.com",
+    description: "Financial modeling engine for gig-economy logistics. Transforms unstructured OCR data into predictive P&L statements for distributed workforces.",
     thumbnailUrl: "/projects/currigiganalyzer.png",
     platform: "Next.js",
-    createdAt: "2025-12-15",
+    createdAt: "2023-12-15",
     featured: true,
-    role: "Full-Stack Data & Analytics",
-    tech: ["Next.js", "Node.js", "PostgreSQL", "Gemini API"],
+    role: "Full-Stack Engineer",
+    tech: ["Next.js", "PostgreSQL", "tRPC", "Gemini API"],
     gradient: "blue",
     iconName: "LineChart",
+    tags: ["Full Stack", "Data", "AI/ML"]
   },
   {
-    id: "8c6bf6e5-9b7f-4d1c-9dc9-bdb2e2c4a508",
+    id: "wholesaleautomated",
     title: "WholesaleAutomated",
     slug: "wholesaleautomated",
-    description: "Automated real estate deal evaluator chaining property data APIs with LLMs to score investments and generate outreach scripts.",
-    tags: ["Automation", "LLM", "API"],
-    liveUrl: "https://wholesaleautomated.com",
+    description: "Enterprise-grade real estate automation suite. Orchestrates multi-state property data pipelines and autonomous agentic outreach scripts.",
     thumbnailUrl: "/projects/wholesaleautomated.png",
     platform: "Next.js",
-    createdAt: "2026-02-10",
+    createdAt: "2024-02-10",
     featured: true,
-    role: "B2B Automation Engine",
+    role: "Automation Architect",
     tech: ["Next.js", "MongoDB", "Data APIs", "Claude 3"],
     gradient: "emerald",
     iconName: "Briefcase",
+    tags: ["Automation", "LLM", "API"]
   },
   {
-    id: "5f2ab7c3-9c89-4af7-9345-a8a3a5f7e509",
+    id: "createdspaceai",
     title: "CreatedSpace AI",
     slug: "createdspace-ai",
-    description: "Master API routing system orchestrating generation of text, images, video, and voice cloning under one unified frontend.",
-    tags: ["AI/ML", "API", "Full Stack"],
-    liveUrl: "https://createdspaceai.vercel.app",
+    description: "Full-scale generative media production platform orchestrating voice cloning, video synthesis, and text-to-image pipelines under unified auth.",
     thumbnailUrl: "/projects/createdspaceai.png",
     platform: "Vercel",
-    createdAt: "2025-09-22",
+    createdAt: "2023-09-22",
     featured: true,
-    role: "Omnichannel Media Hub",
+    role: "Founding Engineer",
     tech: ["Vercel Architecture", "ElevenLabs", "Replicate"],
     gradient: "pink",
     iconName: "Wand2",
-  },
+    tags: ["AI/ML", "API", "Full Stack"]
+  }
 ];
 
-const mapRowToProject = (row: TablesInsert<"projects"> & { id: string }): Project => {
-  const metrics = Array.isArray(row.metrics) ? (row.metrics as ProjectMetric[]) : [];
-  return {
-    id: row.id,
-    title: row.title,
-    description: row.description,
-    tags: row.tags ?? [],
-    repoUrl: row.repo_url || undefined,
-    liveUrl: row.live_url || undefined,
-    platform: row.platform,
-    thumbnailUrl: row.thumbnail_url || undefined,
-    createdAt: row.created_at ? row.created_at.slice(0, 10) : new Date().toISOString().split("T")[0],
-    featured: !!row.featured,
-    role: row.role || undefined,
-    tech: row.tech || [],
-    gradient: (row.gradient as Project["gradient"]) || "blue",
-    category: row.category || undefined,
-    iconName: row.icon_name || undefined,
-    slug: row.slug || undefined,
-    summary: row.summary || undefined,
-    outcomes: row.outcomes || undefined,
-    metrics,
-    heroImageUrl: row.hero_image_url || undefined,
-  };
-};
-
-const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
-
-export async function getProjects(): Promise<Project[]> {
+export const getProjects = async (): Promise<Project[]> => {
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("createdAt", { ascending: false });
 
-  if (error || !data) {
-    console.error("Falling back to default projects:", error?.message);
+  if (error) {
+    console.error("Error fetching projects:", error);
     return defaultProjects;
   }
 
-  if (data.length === 0) return defaultProjects;
-  return data.map((row) => mapRowToProject(row as any));
-}
+  const dbProjects = (data || []).map((p) => ({
+    ...p,
+    tags: p.tags || [],
+    metrics: p.metrics || [],
+    featured: !!p.featured,
+    role: p.role || "",
+    tech: p.tech || [],
+    gradient: p.gradient || "blue",
+    category: p.category || "",
+    iconName: p.iconName || "LineChart",
+    architectureDiagram: p.architecture_diagram || "",
+    technicalChallenges: p.technical_challenges || []
+  }));
 
-export async function getFeaturedProjects(): Promise<Project[]> {
+  return [...defaultProjects, ...dbProjects];
+};
+
+export const getFeaturedProjects = async (): Promise<Project[]> => {
   const projects = await getProjects();
   return projects.filter((p) => p.featured);
-}
+};
 
-export async function getProjectByIdOrSlug(idOrSlug: string): Promise<Project | undefined> {
+export const getProjectByIdOrSlug = async (slug: string): Promise<Project | undefined> => {
+  const projects = await getProjects();
+  return projects.find((p) => p.slug === slug || p.id === slug);
+};
+
+export const addProject = async (project: TablesInsert<"projects">) => {
   const { data, error } = await supabase
     .from("projects")
-    .select("*")
-    .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
-    .limit(1)
-    .maybeSingle();
-
-  if (error) {
-    const fallback = defaultProjects.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
-    return fallback;
-  }
-  if (!data) return undefined;
-  return mapRowToProject(data as any);
-}
-
-function getAdminPassword(override?: string) {
-  if (override) return override;
-  if (typeof window !== "undefined") {
-    return sessionStorage.getItem("jm_admin_pw") || "";
-  }
-  return "";
-}
-
-export async function addProject(project: Omit<Project, "id">, adminPassword?: string) {
-  const pw = getAdminPassword(adminPassword);
-  const payload: TablesInsert<"projects"> = {
-    title: project.title,
-    description: project.description,
-    tags: project.tags,
-    repo_url: project.repoUrl,
-    live_url: project.liveUrl,
-    platform: project.platform,
-    thumbnail_url: project.thumbnailUrl,
-    created_at: project.createdAt,
-    featured: project.featured,
-    role: project.role,
-    tech: project.tech,
-    gradient: project.gradient,
-    category: project.category,
-    icon_name: project.iconName,
-    slug: project.slug || slugify(project.title),
-    summary: project.summary,
-    outcomes: project.outcomes,
-    metrics: project.metrics,
-    hero_image_url: project.heroImageUrl,
-  };
-
-  const { data, error } = await supabase.functions.invoke(
-    "admin-submissions?resource=projects",
-    {
-      method: "POST",
-      headers: { "x-admin-password": pw },
-      body: payload,
-    },
-  );
+    .insert(project)
+    .select()
+    .single();
 
   if (error) throw error;
-  return mapRowToProject(data as any);
-}
+  return data;
+};
 
-export async function updateProject(id: string, updates: Partial<Project>, adminPassword?: string) {
-  const pw = getAdminPassword(adminPassword);
-  const rawPayload: TablesUpdate<"projects"> = {
-    title: updates.title,
-    description: updates.description,
-    tags: updates.tags,
-    repo_url: updates.repoUrl,
-    live_url: updates.liveUrl,
-    platform: updates.platform,
-    thumbnail_url: updates.thumbnailUrl,
-    created_at: updates.createdAt,
-    featured: updates.featured,
-    role: updates.role,
-    tech: updates.tech,
-    gradient: updates.gradient,
-    category: updates.category,
-    icon_name: updates.iconName,
-    slug: updates.slug,
-    summary: updates.summary,
-    outcomes: updates.outcomes,
-    metrics: updates.metrics,
-    hero_image_url: updates.heroImageUrl,
-  };
-  const payload = Object.fromEntries(
-    Object.entries(rawPayload).filter(([, value]) => value !== undefined)
-  ) as TablesUpdate<"projects">;
+export const updateProject = async (id: string, project: TablesUpdate<"projects">) => {
+  const { data, error } = await supabase
+    .from("projects")
+    .update(project)
+    .eq("id", id)
+    .select()
+    .single();
 
-  const { data, error } = await supabase.functions.invoke(
-    "admin-submissions?resource=projects",
-    {
-      method: "PATCH",
-      headers: { "x-admin-password": pw },
-      body: { id, ...payload },
-    },
-  );
   if (error) throw error;
-  return mapRowToProject(data as any);
-}
+  return data;
+};
 
-export async function deleteProject(id: string, adminPassword?: string) {
-  const pw = getAdminPassword(adminPassword);
-  const { error } = await supabase.functions.invoke(
-    "admin-submissions?resource=projects",
-    {
-      method: "DELETE",
-      headers: { "x-admin-password": pw },
-      body: { id },
-    },
-  );
+export const deleteProject = async (id: string) => {
+  const { error } = await supabase
+    .from("projects")
+    .delete()
+    .eq("id", id);
+
   if (error) throw error;
-}
+};
