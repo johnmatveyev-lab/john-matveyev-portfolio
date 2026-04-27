@@ -4,6 +4,40 @@ import { Project, ProjectMetric } from "@/types/project";
 
 const defaultProjects: Project[] = [
   {
+    id: "aim8",
+    title: "AIM8.io",
+    slug: "aim8",
+    description: "Developing a cloud-native Virtual Studio Environment (VSE) capable of real-time multi-track audio generation via low-latency AI orchestration. Redefining professional music production workflows.",
+    summary: "The first professional-grade AI DAW (Digital Audio Workstation) providing composer-level orchestration at the speed of thought.",
+    thumbnailUrl: "/projects/aim8.png",
+    platform: "Google AI Studio",
+    createdAt: "2024-02-15",
+    featured: true,
+    category: "Generative Audio",
+    role: "Founding Engineer",
+    gradient: "violet",
+    iconName: "Mic",
+    tech: ["PyTorch", "AudioWorklets", "Next.js", "Redis"],
+    tags: ["Generative AI", "Real-Time", "SaaS"],
+    metrics: [
+      { label: "Audio Latency", value: "12ms" },
+      { label: "Export Speed", value: "10x Realtime" }
+    ],
+    outcomes: [
+      "Won 'Innovation in Music Tech' regional award 2024.",
+      "Successfully scaled to 5,000+ waitlist signups in month one."
+    ],
+    architectureDiagram: `graph LR
+      User[User Interface] -->|WebSocket| Orchestrator[Audio Orchestrator]
+      Orchestrator -->|Jobs| GPU[ML Worker Clusters]
+      GPU -->|Stream| S3[Object Storage]
+      Orchestrator -->|Sync| Client[AudioWorklet Engine]`,
+    technicalChallenges: [
+      "Synchronizing AI-generated MIDI with multi-track PCM playback.",
+      "Scaling WebSocket infrastructure to support 1k sub-20ms concurrent streams."
+    ]
+  },
+  {
     id: "quantumearth",
     title: "QuantumEarth",
     slug: "quantumearth",
@@ -40,38 +74,20 @@ const defaultProjects: Project[] = [
     ]
   },
   {
-    id: "aim8",
-    title: "AIM8.io",
-    slug: "aim8",
-    description: "Developing a cloud-native Virtual Studio Environment (VSE) capable of real-time multi-track audio generation via low-latency AI orchestration. Redefining professional music production workflows.",
-    summary: "The first professional-grade AI DAW (Digital Audio Workstation) providing composer-level orchestration at the speed of thought.",
-    thumbnailUrl: "/projects/aim8.png",
-    platform: "Google AI Studio",
-    createdAt: "2024-02-15",
+    id: "createvibe",
+    title: "CreateVibe",
+    slug: "createvibe",
+    liveUrl: "https://createvibe.vercel.app",
+    description: "Full-scale generative media production platform orchestrating voice cloning, video synthesis, and text-to-image pipelines under unified auth.",
+    thumbnailUrl: "/projects/createdspaceai.png",
+    platform: "Vercel",
+    createdAt: "2023-09-22",
     featured: true,
-    category: "Generative Audio",
     role: "Founding Engineer",
-    gradient: "violet",
-    iconName: "Mic",
-    tech: ["PyTorch", "AudioWorklets", "Next.js", "Redis"],
-    tags: ["Generative AI", "Real-Time", "SaaS"],
-    metrics: [
-      { label: "Audio Latency", value: "12ms" },
-      { label: "Export Speed", value: "10x Realtime" }
-    ],
-    outcomes: [
-      "Won 'Innovation in Music Tech' regional award 2024.",
-      "Successfully scaled to 5,000+ waitlist signups in month one."
-    ],
-    architectureDiagram: `graph LR
-      User[User Interface] -->|WebSocket| Orchestrator[Audio Orchestrator]
-      Orchestrator -->|Jobs| GPU[ML Worker Clusters]
-      GPU -->|Stream| S3[Object Storage]
-      Orchestrator -->|Sync| Client[AudioWorklet Engine]`,
-    technicalChallenges: [
-      "Synchronizing AI-generated MIDI with multi-track PCM playback.",
-      "Scaling WebSocket infrastructure to support 1k sub-20ms concurrent streams."
-    ]
+    tech: ["Vercel Architecture", "ElevenLabs", "Replicate"],
+    gradient: "pink",
+    iconName: "Wand2",
+    tags: ["AI/ML", "API", "Full Stack"]
   },
   {
     id: "prettyprivilegeai",
@@ -110,6 +126,21 @@ const defaultProjects: Project[] = [
     ]
   },
   {
+    id: "blueridgenanoseal",
+    title: "Blue Ridge Nano Seal",
+    slug: "blue-ridge-nano-seal",
+    description: "Developed a mission-critical operations hub with automated CRM pipelines and RBAC dashboards for field service enterprise management.",
+    thumbnailUrl: "/projects/blueridgenanoseal.png",
+    platform: "React",
+    createdAt: "2023-10-18",
+    featured: true,
+    role: "Enterprise Systems Lead",
+    tech: ["Firebase Auth/DB", "Stripe Connect", "Google Maps"],
+    gradient: "blue",
+    iconName: "Building",
+    tags: ["Enterprise", "Full Stack", "Automation"]
+  },
+  {
     id: "speakgenie",
     title: "SpeakGenie",
     slug: "speakgenie",
@@ -144,19 +175,19 @@ const defaultProjects: Project[] = [
     ]
   },
   {
-    id: "blueridgenanoseal",
-    title: "Blue Ridge Nano Seal",
-    slug: "blue-ridge-nano-seal",
-    description: "Developed a mission-critical operations hub with automated CRM pipelines and RBAC dashboards for field service enterprise management.",
-    thumbnailUrl: "/projects/blueridgenanoseal.png",
-    platform: "React",
-    createdAt: "2023-10-18",
+    id: "currigiganalyzer",
+    title: "CurriGigAnalyzer",
+    slug: "currigiganalyzer",
+    description: "Financial modeling engine for gig-economy logistics. Transforms unstructured OCR data into predictive P&L statements for distributed workforces.",
+    thumbnailUrl: "/projects/currigiganalyzer.png",
+    platform: "Next.js",
+    createdAt: "2023-12-15",
     featured: true,
-    role: "Enterprise Systems Lead",
-    tech: ["Firebase Auth/DB", "Stripe Connect", "Google Maps"],
+    role: "Full-Stack Engineer",
+    tech: ["Next.js", "PostgreSQL", "tRPC", "Gemini API"],
     gradient: "blue",
-    iconName: "Building",
-    tags: ["Enterprise", "Full Stack", "Automation"]
+    iconName: "LineChart",
+    tags: ["Full Stack", "Data", "AI/ML"]
   },
   {
     id: "aim8video",
@@ -174,49 +205,72 @@ const defaultProjects: Project[] = [
     tags: ["AI/ML", "Creative Tech", "SaaS"]
   },
   {
-    id: "currigiganalyzer",
-    title: "CurriGigAnalyzer",
-    slug: "currigiganalyzer",
-    description: "Financial modeling engine for gig-economy logistics. Transforms unstructured OCR data into predictive P&L statements for distributed workforces.",
-    thumbnailUrl: "/projects/currigiganalyzer.png",
-    platform: "Next.js",
-    createdAt: "2023-12-15",
-    featured: true,
-    role: "Full-Stack Engineer",
-    tech: ["Next.js", "PostgreSQL", "tRPC", "Gemini API"],
-    gradient: "blue",
-    iconName: "LineChart",
-    tags: ["Full Stack", "Data", "AI/ML"]
-  },
-  {
-    id: "wholesaleautomated",
-    title: "WholesaleAutomated",
-    slug: "wholesaleautomated",
-    description: "Enterprise-grade real estate automation suite. Orchestrates multi-state property data pipelines and autonomous agentic outreach scripts.",
-    thumbnailUrl: "/projects/wholesaleautomated.png",
-    platform: "Next.js",
-    createdAt: "2024-02-10",
-    featured: true,
-    role: "Automation Architect",
-    tech: ["Next.js", "MongoDB", "Data APIs", "Claude 3"],
-    gradient: "emerald",
-    iconName: "Briefcase",
-    tags: ["Automation", "LLM", "API"]
-  },
-  {
-    id: "createdspaceai",
-    title: "CreatedSpace AI",
-    slug: "createdspace-ai",
-    description: "Full-scale generative media production platform orchestrating voice cloning, video synthesis, and text-to-image pipelines under unified auth.",
-    thumbnailUrl: "/projects/createdspaceai.png",
+    id: "aiskilldrop",
+    title: "AI Skill Drop",
+    slug: "aiskilldrop",
+    liveUrl: "https://ai-skill-drop.vercel.app",
+    description: "The definitive resource for AI agent builders. Discover reusable skills, automated agent workflows, and step-by-step how-to guides.",
+    summary: "A curated directory for AI agent automations and skills, helping developers track the pulse of agentic engineering.",
+    thumbnailUrl: "/projects/aiskilldrop.png",
     platform: "Vercel",
-    createdAt: "2023-09-22",
+    createdAt: "2024-04-15",
     featured: true,
-    role: "Founding Engineer",
-    tech: ["Vercel Architecture", "ElevenLabs", "Replicate"],
+    category: "AI Educational",
+    role: "Full-Stack Engineer",
+    gradient: "emerald",
+    iconName: "Sparkles",
+    tech: ["Next.js", "Tailwind CSS", "MDX"],
+    tags: ["AI/ML", "Education", "Development"],
+    metrics: [
+      { label: "Updates", value: "Weekly" },
+      { label: "Community", value: "Discord" }
+    ],
+    outcomes: [
+      "Curated hundreds of valuable AI skills and automations for the developer community.",
+      "Provided an essential knowledge base for tracking emerging AI agent frameworks."
+    ],
+    architectureDiagram: `graph TD
+      MDX[MDX Content] -->|Statically Generated| App[Next.js App]
+      App -->|CDN Edge| Users[Developer Community]`,
+    technicalChallenges: [
+      "Compiling and serving dynamic documentation structures optimally for edge networks.",
+      "Maintaining up-to-date resources in a fast-moving AI knowledge space."
+    ]
+  },
+  {
+    id: "ugcgenerator",
+    title: "UGC Generator",
+    slug: "ugc-generator",
+    liveUrl: "https://ugc-generator.lovable.app",
+    description: "A centralized platform empowering brands to seamlessly create, manage, and scale user-generated campaigns. Complete with creator tracking and analytics.",
+    summary: "Automated UGC hub designed to streamline brand and creator collaborations.",
+    thumbnailUrl: "/projects/ugcgenerator.png",
+    platform: "Lovable",
+    createdAt: "2024-04-20",
+    featured: true,
+    category: "Generative Content",
+    role: "Lead Engineer",
     gradient: "pink",
-    iconName: "Wand2",
-    tags: ["AI/ML", "API", "Full Stack"]
+    iconName: "Video",
+    tech: ["React", "Lovable", "Supabase", "Tailwind CSS"],
+    tags: ["SaaS", "Content", "Automation"],
+    metrics: [
+      { label: "Creators", value: "10k+" },
+      { label: "UGC Generated", value: "1.2M+" }
+    ],
+    outcomes: [
+      "Automated complete end-to-end UGC campaign workflows saving teams ~20 hours weekly.",
+      "Established centralized dashboard for evaluating creator performance."
+    ],
+    architectureDiagram: `graph LR
+      Brands[Brands] -->|Campaign Setup| Hub[UGC Hub]
+      Hub -->|Briefs| Creators[Creators]
+      Creators -->|Upload| Pipeline[Content Pipeline]
+      Pipeline -->|Approval| Hub`,
+    technicalChallenges: [
+      "Handling large asynchronous video file uploads with resilient retries.",
+      "Building responsive real-time dashboards."
+    ]
   }
 ];
 
@@ -231,8 +285,9 @@ export const getProjects = async (): Promise<Project[]> => {
     return defaultProjects;
   }
 
-  const dbProjects = (data || []).map((p) => ({
+  const dbProjects = (data || []).map((p: any) => ({
     ...p,
+    createdAt: p.created_at,
     tags: p.tags || [],
     metrics: p.metrics || [],
     featured: !!p.featured,
@@ -240,7 +295,7 @@ export const getProjects = async (): Promise<Project[]> => {
     tech: p.tech || [],
     gradient: p.gradient || "blue",
     category: p.category || "",
-    iconName: p.iconName || "LineChart",
+    iconName: p.icon_name || "LineChart",
     architectureDiagram: p.architecture_diagram || "",
     technicalChallenges: p.technical_challenges || []
   }));
