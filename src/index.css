@@ -200,6 +200,19 @@
     background: radial-gradient(600px circle at center, hsl(160 84% 45% / 0.1), transparent 70%);
   }
 
+  /* Grid Background Effect */
+  .bg-grid-pattern {
+    background-size: 50px 50px;
+    background-image: 
+      linear-gradient(to right, hsl(var(--border) / 0.2) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.2) 1px, transparent 1px);
+  }
+
+  .mask-radial-fade {
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
+  }
+
   /* Gradient card styles */
   .card-gradient-blue {
     background: linear-gradient(135deg, hsl(217 91% 60% / 0.15), hsl(187 100% 50% / 0.05));
