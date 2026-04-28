@@ -10,7 +10,7 @@ import {
   LogOut, Plus, Pencil, Trash2, Star, StarOff, ExternalLink, Github,
   LayoutDashboard, FolderOpen, X, Inbox, ChevronDown, ChevronUp, Eye,
   MessageSquare, Quote, Settings, Search, Archive, MailOpen, Mail,
-  RefreshCw, Loader2, ToggleLeft, ToggleRight, Save, AlertTriangle,
+  RefreshCw, Loader2, ToggleLeft, ToggleRight, Save, AlertTriangle, Calendar,
 } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -322,6 +322,44 @@ function MessageCard({ msg, onToggleRead, onArchive, onDelete }: {
   );
 }
 
+// ─── Booking Card ────────────────────────────────────────────────────────────
+export interface Booking {
+  id: string; created_at: string; name: string; email: string;
+  date: string; time: string; notes: string; is_archived: boolean;
+}
+
+function BookingCard({ booking, onArchive, onDelete }: {
+  booking: Booking;
+  onArchive: (id: string, archive: boolean) => void;
+  onDelete: (id: string) => void;
+}) {
+  return (
+    <div className={`bg-card border rounded-xl px-5 py-4 transition-colors border-border`}>
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-sm font-medium truncate">{booking.name}</p>
+            <span className="mono text-[10px] text-muted-foreground">{booking.email}</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm mt-2">
+            <div className="flex items-center gap-1.5 text-primary">
+              <Calendar size={14} />
+              <span className="font-medium">{booking.date} at {booking.time}</span>
+            </div>
+          </div>
+          {booking.notes && <p className="text-sm text-muted-foreground mt-2">{booking.notes}</p>}
+          <p className="mono text-[10px] text-muted-foreground mt-3">Booked on: {new Date(booking.created_at).toLocaleString()}</p>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <a href={`mailto:${booking.email}`} className="text-muted-foreground hover:text-primary transition-colors p-1"><ExternalLink size={14} /></a>
+          <button onClick={() => onArchive(booking.id, !booking.is_archived)} aria-label={booking.is_archived ? "Unarchive booking" : "Archive booking"} title={booking.is_archived ? "Unarchive" : "Archive"} className="text-muted-foreground hover:text-foreground transition-colors p-2"><Archive size={14} /></button>
+          <button onClick={() => onDelete(booking.id)} aria-label="Delete booking" className="text-muted-foreground hover:text-destructive transition-colors p-2"><Trash2 size={14} /></button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Testimonial Form ────────────────────────────────────────────────────────
 interface TestimonialData {
   id?: string; name: string; role: string; avatar_url: string;
@@ -394,7 +432,7 @@ function TestimonialForm({ initial, onSave, onCancel }: {
 const CHART_COLORS = ["hsl(187, 90%, 48%)", "hsl(40, 85%, 55%)", "hsl(142, 71%, 45%)", "hsl(262, 83%, 58%)", "hsl(0, 72%, 51%)", "hsl(200, 80%, 50%)"];
 
 // ─── Admin Dashboard ─────────────────────────────────────────────────────────
-type ViewType = "overview" | "projects" | "submissions" | "messages" | "testimonials" | "settings";
+type ViewType = "overview" | "projects" | "submissions" | "messages" | "appointments" | "testimonials" | "settings";
 
 export default function AdminDashboard() {
   const { isAuthenticated, logout } = useAuth();
@@ -414,6 +452,11 @@ export default function AdminDashboard() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
+
+  // Bookings
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loadingBookings, setLoadingBookings] = useState(false);
+  const [showArchivedBookings, setShowArchivedBookings] = useState(false);
 
   // Testimonials
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
@@ -440,6 +483,7 @@ export default function AdminDashboard() {
       setProjects(data);
       await fetchSubmissions();
       await fetchMessages();
+      await fetchBookings();
     };
     bootstrap();
 
@@ -470,10 +514,21 @@ export default function AdminDashboard() {
       })
       .subscribe();
 
+    const bookingsSub = supabase
+      .channel("public:bookings")
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings" }, (payload) => {
+        if (payload.eventType === "INSERT") {
+          toast.info("New booking received!");
+        }
+        fetchBookings();
+      })
+      .subscribe();
+
     return () => {
       supabase.removeChannel(messageSub);
       supabase.removeChannel(submissionsSub);
       supabase.removeChannel(projectsSub);
+      supabase.removeChannel(bookingsSub);
     };
   }, [isAuthenticated, navigate]);
 
@@ -494,6 +549,15 @@ export default function AdminDashboard() {
       setMessages(Array.isArray(data) ? data : []);
     } catch (e: any) { console.error(e); }
     finally { setLoadingMsgs(false); }
+  };
+
+  const fetchBookings = async () => {
+    setLoadingBookings(true);
+    try {
+      const data = await adminFetch(`bookings?archived=${showArchivedBookings}`, "GET");
+      setBookings(Array.isArray(data) ? data : []);
+    } catch (e: any) { console.error(e); }
+    finally { setLoadingBookings(false); }
   };
 
   const fetchTestimonials = async () => {
@@ -546,7 +610,7 @@ export default function AdminDashboard() {
   };
   const handleSaveNew = async (data: Omit<Project, "id">) => {
     try {
-      await addProject(data);
+      await addProject(data as any);
       setShowNew(false);
       await refresh();
       toast.success("Project created");
@@ -556,7 +620,7 @@ export default function AdminDashboard() {
   };
   const handleSaveEdit = async (id: string, data: Omit<Project, "id">) => {
     try {
-      await updateProject(id, data);
+      await updateProject(id, data as any);
       setEditingId(null);
       await refresh();
       toast.success("Project updated");
@@ -603,6 +667,24 @@ export default function AdminDashboard() {
     } catch { toast.error("Failed to delete"); }
   };
 
+  // ── Booking actions ──
+  const toggleBookingArchive = async (id: string, archive: boolean) => {
+    try {
+      await adminFetch("bookings", "PATCH", { id, is_archived: archive });
+      setBookings((b) => b.filter((booking) => booking.id !== id)); // Remove from current view upon toggling archive
+      toast.success(archive ? "Booking archived" : "Booking unarchived");
+      // Optionally refetch based on current `showArchivedBookings` state if we want to keep them in the list
+    } catch { toast.error("Failed to update booking status"); }
+  };
+
+  const deleteBooking = async (id: string) => {
+    try {
+      await adminFetch("bookings", "DELETE", { id });
+      setBookings((b) => b.filter((booking) => booking.id !== id));
+      toast.success("Booking deleted");
+    } catch { toast.error("Failed to delete booking"); }
+  };
+
   // ── Testimonial actions ──
   const saveTestimonial = async (data: TestimonialData) => {
     try {
@@ -642,6 +724,7 @@ export default function AdminDashboard() {
   const featuredCount = projects.filter((p) => p.featured).length;
   const pendingCount = submissions.filter((s) => s.status === "pending").length;
   const unreadCount = messages.filter((m) => !m.is_read && !m.is_archived).length;
+  const activeBookingsCount = bookings.filter((b) => !b.is_archived).length;
 
   const filteredProjects = useMemo(() => {
     if (!projectSearch) return projects;
@@ -660,6 +743,8 @@ export default function AdminDashboard() {
   }, [submissions, subSearch, subStatusFilter]);
 
   const activeMessages = useMemo(() => messages.filter((m) => !m.is_archived), [messages]);
+  // Fetch ensures we show archived if requested, but we can do a local filter too if we want.
+  const activeBookings = useMemo(() => bookings, [bookings]);
 
   // ── Charts data ──
   const platformData = useMemo(() => {
@@ -681,6 +766,7 @@ export default function AdminDashboard() {
   const navItems: { key: ViewType; icon: any; label: string; badge?: number }[] = [
     { key: "overview", icon: LayoutDashboard, label: "Overview" },
     { key: "projects", icon: FolderOpen, label: "Projects" },
+    { key: "appointments", icon: Calendar, label: "Appointments", badge: activeBookingsCount },
     { key: "submissions", icon: Inbox, label: "Submissions", badge: pendingCount },
     { key: "messages", icon: MessageSquare, label: "Messages", badge: unreadCount },
     { key: "testimonials", icon: Quote, label: "Testimonials" },
@@ -918,6 +1004,42 @@ export default function AdminDashboard() {
             </motion.div>
           )}
 
+          {/* ══════════ APPOINTMENTS ══════════ */}
+          {view === "appointments" && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <h1 className="text-2xl font-bold">Appointments</h1>
+                  <button onClick={() => { setShowArchivedBookings(!showArchivedBookings); }}
+                    className={`text-sm px-3 py-1 rounded-full border transition-colors ${showArchivedBookings ? "bg-primary/10 border-primary text-primary" : "bg-muted text-muted-foreground border-transparent hover:border-border"}`}>
+                    {showArchivedBookings ? "Showing Archived" : "Show Archived"}
+                  </button>
+                </div>
+                <button onClick={fetchBookings} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  <RefreshCw size={14} className={loadingBookings ? "animate-spin" : ""} /> Refresh
+                </button>
+              </div>
+              
+              {loadingBookings ? (
+                <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+              ) : bookings.length === 0 ? (
+                <div className="text-center py-20">
+                  <Calendar size={32} className="text-muted-foreground mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">
+                    {showArchivedBookings ? "No archived appointments found" : "No active appointments yet"}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {bookings.map((booking) => (
+                    <BookingCard key={booking.id} booking={booking} onArchive={toggleBookingArchive}
+                      onDelete={(id) => setDeleteConfirm({ type: "booking", id, label: `appointment with ${booking.name}` })} />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
           {/* ══════════ TESTIMONIALS ══════════ */}
           {view === "testimonials" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -1015,6 +1137,7 @@ export default function AdminDashboard() {
               else if (type === "submission") deleteSub(id);
               else if (type === "message") deleteMsg(id);
               else if (type === "testimonial") deleteTestimonial(id);
+              else if (type === "booking") deleteBooking(id);
               setDeleteConfirm(null);
             }}>Delete</AlertDialogAction>
           </AlertDialogFooter>

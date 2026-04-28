@@ -177,6 +177,38 @@ serve(async (req) => {
       }
     }
 
+    // ── BOOKINGS ─────────────────────────────────────────────────
+    if (resource === "bookings") {
+      if (req.method === "GET") {
+        const archived = url.searchParams.get("archived") === "true";
+        const { data, error } = await supabase
+          .from("bookings")
+          .select("*")
+          .eq("is_archived", archived)
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return json(data);
+      }
+      if (req.method === "PATCH") {
+        const { id, ...updates } = await req.json();
+        const { error } = await supabase
+          .from("bookings")
+          .update(updates)
+          .eq("id", id);
+        if (error) throw error;
+        return json({ success: true });
+      }
+      if (req.method === "DELETE") {
+        const { id } = await req.json();
+        const { error } = await supabase
+          .from("bookings")
+          .delete()
+          .eq("id", id);
+        if (error) throw error;
+        return json({ success: true });
+      }
+    }
+
     // ── SETTINGS ─────────────────────────────────────────────────
     if (resource === "settings") {
       if (req.method === "GET") {
