@@ -140,6 +140,11 @@
     background: hsl(40 85% 55% / 0.3);
     color: hsl(40 15% 95%);
   }
+
+  /* Global focus styles */
+  a, button, [role="button"] {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
 }
 
 @layer components {

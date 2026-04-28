@@ -180,9 +180,31 @@ export default function FeaturedProjects() {
 
         {isLoading ? (
           <div className="grid md:grid-cols-2 gap-5">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-64 rounded-2xl border border-border bg-card animate-pulse" />
-            ))}
+            {Array.from({ length: 4 }).map((_, i) => {
+              const isWide = bentoClass(i, 4).includes("col-span-2");
+              return (
+                <div key={i} className={`rounded-2xl border border-border/60 bg-card/60 overflow-hidden relative ${bentoClass(i, 4)}`}>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-muted to-muted/20 opacity-60" />
+                  <div className="h-[160px] bg-muted/30 animate-pulse" style={{ height: isWide ? "200px" : "160px" }} />
+                  <div className={`p-6 block ${isWide ? "md:p-8 md:flex md:items-start md:gap-8" : "md:p-7"}`}>
+                    <div className={isWide ? "md:flex-1 w-full" : "w-full"}>
+                      <div className="w-10 h-10 rounded-xl bg-muted/40 animate-pulse mb-4" />
+                      <div className="h-6 w-1/2 bg-muted/40 rounded-md animate-pulse mb-4" />
+                      <div className="space-y-2 mb-6">
+                        <div className="h-4 w-full bg-muted/40 rounded-md animate-pulse" />
+                        <div className="h-4 w-5/6 bg-muted/40 rounded-md animate-pulse" />
+                        {!isWide && <div className="h-4 w-4/6 bg-muted/40 rounded-md animate-pulse" />}
+                      </div>
+                    </div>
+                    <div className={`flex flex-wrap gap-2 ${isWide ? "md:max-w-[200px] md:mt-12 w-full mt-4" : ""}`}>
+                      <div className="h-5 w-16 bg-muted/40 rounded-full animate-pulse" />
+                      <div className="h-5 w-20 bg-muted/40 rounded-full animate-pulse" />
+                      <div className="h-5 w-12 bg-muted/40 rounded-full animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-5">

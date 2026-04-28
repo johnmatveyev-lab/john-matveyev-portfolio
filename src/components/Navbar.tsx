@@ -7,6 +7,7 @@ import { useTheme } from "./ThemeProvider";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const location = useLocation();
   const isHome = location.pathname === "/";
   const { theme, setTheme } = useTheme();
@@ -47,31 +48,62 @@ export default function Navbar() {
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
-          {links.map((l) =>
-            l.href.startsWith("/") && !l.href.startsWith("/#") ? (
-              <PrefetchLink
-                key={l.label}
-                to={l.href}
-                className="mono text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {l.label}
-              </PrefetchLink>
-            ) : (
-              <a
-                key={l.label}
-                href={l.href}
-                className="mono text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {l.label}
-              </a>
-            )
-          )}
-          <PrefetchLink
-            to="/admin"
-            className="mono text-muted-foreground hover:text-primary transition-colors"
+          {links.map((l) => (
+            <div 
+              key={l.label} 
+              className="relative"
+              onMouseEnter={() => setHoveredLink(l.label)}
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              {hoveredLink === l.label && (
+                <motion.div
+                  layoutId="navbar-hover"
+                  className="absolute inset-0 -inset-x-3 -inset-y-2 bg-secondary/80 rounded-full"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              )}
+              {l.href.startsWith("/") && !l.href.startsWith("/#") ? (
+                <PrefetchLink
+                  to={l.href}
+                  className="mono text-muted-foreground hover:text-foreground transition-colors relative z-10"
+                >
+                  {l.label}
+                </PrefetchLink>
+              ) : (
+                <a
+                  href={l.href}
+                  className="mono text-muted-foreground hover:text-foreground transition-colors relative z-10"
+                >
+                  {l.label}
+                </a>
+              )}
+            </div>
+          ))}
+          <div
+            className="relative"
+            onMouseEnter={() => setHoveredLink("Admin")}
+            onMouseLeave={() => setHoveredLink(null)}
           >
-            Admin
-          </PrefetchLink>
+            {hoveredLink === "Admin" && (
+              <motion.div
+                layoutId="navbar-hover"
+                className="absolute inset-0 -inset-x-3 -inset-y-2 bg-secondary/80 rounded-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              />
+            )}
+            <PrefetchLink
+              to="/admin"
+              className="mono text-muted-foreground hover:text-primary transition-colors relative z-10"
+            >
+              Admin
+            </PrefetchLink>
+          </div>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-muted"
@@ -98,47 +130,60 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="md:hidden glass border-t border-border px-6 pb-6"
+          className="md:hidden glass border-t border-border px-6 pb-6 overflow-hidden"
         >
-          {links.map((l) =>
-            l.href.startsWith("/") && !l.href.startsWith("/#") ? (
-              <PrefetchLink
-                key={l.label}
-                to={l.href}
-                onClick={() => setOpen(false)}
-                className="block py-3 mono text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {l.label}
-              </PrefetchLink>
-            ) : (
-              <a
-                key={l.label}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="block py-3 mono text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {l.label}
-              </a>
-            )
-          )}
-          <PrefetchLink
-            to="/admin"
-            onClick={() => setOpen(false)}
-            className="block py-3 mono text-muted-foreground hover:text-primary transition-colors"
-          >
-            Admin
-          </PrefetchLink>
-          <button
-            onClick={() => {
-              setTheme(theme === 'dark' ? 'light' : 'dark');
-              setOpen(false);
+          <motion.div
+            initial="closed"
+            animate="open"
+            variants={{
+              open: { transition: { staggerChildren: 0.1 } },
+              closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
             }}
-            className="flex w-full items-center justify-between py-3 mono text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Toggle theme"
           >
-            Switch Theme
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+            {links.map((l) => (
+              <motion.div key={l.label} variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: 10 } }}>
+                {l.href.startsWith("/") && !l.href.startsWith("/#") ? (
+                  <PrefetchLink
+                    to={l.href}
+                    onClick={() => setOpen(false)}
+                    className="block py-3 mono text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {l.label}
+                  </PrefetchLink>
+                ) : (
+                  <a
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className="block py-3 mono text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {l.label}
+                  </a>
+                )}
+              </motion.div>
+            ))}
+            <motion.div variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: 10 } }}>
+              <PrefetchLink
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className="block py-3 mono text-muted-foreground hover:text-primary transition-colors"
+              >
+                Admin
+              </PrefetchLink>
+            </motion.div>
+            <motion.div variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: 10 } }}>
+              <button
+                onClick={() => {
+                  setTheme(theme === 'dark' ? 'light' : 'dark');
+                  setOpen(false);
+                }}
+                className="flex w-full items-center justify-between py-3 mono text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Toggle theme"
+              >
+                Switch Theme
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </motion.div>
+          </motion.div>
         </motion.div>
       )}
       </motion.nav>

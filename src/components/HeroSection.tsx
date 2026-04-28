@@ -68,7 +68,7 @@ export default function HeroSection() {
             </motion.div>
 
             {/* Headline with line-by-line reveal */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tight leading-[0.95] mb-8">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold -tracking-[0.02em] leading-[0.95] mb-8">
               <motion.span
                 variants={lineReveal}
                 initial="hidden"
@@ -134,23 +134,23 @@ export default function HeroSection() {
             >
               <a
                 href="#featured"
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <Cpu className="w-4 h-4" />
+                <Cpu className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 View Projects
               </a>
               <Link
                 to="/skills"
-                className="inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:border-primary/50 transition-colors"
+                className="group inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:border-primary/50 transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 Explore My Expertise
               </Link>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:border-accent/50 transition-colors"
+                className="group inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium hover:border-accent/50 transition-all active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <Network className="w-4 h-4" />
+                <Network className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 Get in Touch
               </a>
             </motion.div>
@@ -164,7 +164,7 @@ export default function HeroSection() {
             className="relative flex-shrink-0"
           >
             <div
-              className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[420px] lg:h-[420px] overflow-hidden"
+              className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[420px] lg:h-[420px] overflow-hidden transition-transform duration-700 ease-out hover:scale-[1.02]"
               style={{
                 borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%",
               }}
