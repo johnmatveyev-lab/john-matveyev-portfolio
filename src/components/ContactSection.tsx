@@ -19,19 +19,22 @@ const githubUrl = import.meta.env.VITE_GITHUB_URL || "https://github.com";
 const emailAddress = "contact@matveyev.ai";
 
 export default function ContactSection() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [activeTab, setActiveTab] = useState<"message" | "booking">("message");
+  const [form, setForm] = useState({ name: "", email: "", message: "", date: "", time: "" });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const notifySlack = async (payload: { name: string; email: string; message: string }) => {
+  const notifySlack = async (payload: { name: string; email: string; message: string; date?: string; time?: string }) => {
     if (!slackWebhook) return;
     try {
+      const text = activeTab === "booking" 
+        ? `New booking request\nName: ${payload.name}\nEmail: ${payload.email}\nDate: ${payload.date}\nTime: ${payload.time}\nNotes: ${payload.message}`
+        : `New portfolio lead\nName: ${payload.name}\nEmail: ${payload.email}\nMessage: ${payload.message}`;
+
       await fetch(slackWebhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: `New portfolio lead\nName: ${payload.name}\nEmail: ${payload.email}\nMessage: ${payload.message}`,
-        }),
+        body: JSON.stringify({ text }),
       });
     } catch (e) {
       console.error("Slack webhook failed", e);
@@ -40,26 +43,64 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = contactSchema.safeParse(form);
-    if (!result.success) {
-      toast.error(result.error.errors[0].message);
-      return;
-    }
     setSending(true);
+    
     try {
-      const { error } = await supabase.from("contact_messages").insert({
-        name: result.data.name,
-        email: result.data.email,
-        message: result.data.message,
-      });
-      if (error) throw error;
-      notifySlack(result.data);
+      if (activeTab === "message") {
+        const result = contactSchema.safeParse(form);
+        if (!result.success) {
+          toast.error(result.error.errors[0].message);
+          setSending(false);
+          return;
+        }
+
+        const { error } = await supabase.from("contact_messages").insert({
+          name: result.data.name,
+          email: result.data.email,
+          message: result.data.message,
+        });
+        if (error) throw error;
+        
+        notifySlack({
+          name: result.data.name || "Unknown",
+          email: result.data.email || "Unknown",
+          message: result.data.message || ""
+        });
+        toast.success("Message sent! I'll get back to you soon.");
+        track("contact:submitted", { source: "contact_section", type: "message" });
+      } else {
+        // Basic booking validation
+        if (!form.name || !form.email || !form.date || !form.time) {
+          toast.error("Please fill out all required booking fields.");
+          setSending(false);
+          return;
+        }
+
+        const { error } = await supabase.from("bookings").insert({
+          name: form.name,
+          email: form.email,
+          date: form.date,
+          time: form.time,
+          notes: form.message,
+        });
+
+        if (error) throw error;
+
+        notifySlack({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          date: form.date,
+          time: form.time
+        });
+        toast.success("Booking requested! I will confirm it shortly.");
+        track("contact:submitted", { source: "contact_section", type: "booking" });
+      }
+
       setSent(true);
-      setForm({ name: "", email: "", message: "" });
-      toast.success("Message sent! I'll get back to you soon.");
-      track("contact:submitted", { source: "contact_section" });
+      setForm({ name: "", email: "", message: "", date: "", time: "" });
     } catch {
-      toast.error("Failed to send message. Please try again.");
+      toast.error("Failed to submit. Please try again.");
     } finally {
       setSending(false);
     }
@@ -85,8 +126,24 @@ export default function ContactSection() {
           </p>
 
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Form */}
+            {/* Contact Form OR Booking Form */}
             <div>
+              {/* Tabs */}
+              <div className="flex gap-4 mb-6">
+                <button
+                  onClick={() => setActiveTab("message")}
+                  className={`text-sm font-medium pb-1.5 border-b-2 transition-colors ${activeTab === "message" ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                >
+                  Message
+                </button>
+                <button
+                  onClick={() => setActiveTab("booking")}
+                  className={`text-sm font-medium pb-1.5 border-b-2 transition-colors ${activeTab === "booking" ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                >
+                  Book a slot
+                </button>
+              </div>
+
               {sent ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -94,19 +151,48 @@ export default function ContactSection() {
                   className="bg-card border border-border rounded-2xl p-8 text-center"
                 >
                   <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
+                  <h3 className="text-xl font-semibold mb-2">
+                    {activeTab === "booking" ? "Booking Requested!" : "Message Sent!"}
+                  </h3>
                   <p className="text-muted-foreground text-sm mb-6">
-                    Thanks for reaching out. I'll get back to you as soon as possible.
+                    {activeTab === "booking" 
+                      ? "Thanks for requesting a slot. I'll get back to you soon with a confirmation."
+                      : "Thanks for reaching out. I'll get back to you as soon as possible."}
                   </p>
                   <button
                     onClick={() => setSent(false)}
                     className="mono text-sm text-primary hover:underline"
                   >
-                    Send another message
+                    Send another {activeTab === "booking" ? "request" : "message"}
                   </button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {activeTab === "booking" && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="mono text-xs text-muted-foreground mb-1.5 block">Date</label>
+                        <input
+                          type="date"
+                          value={form.date}
+                          onChange={(e) => setForm({ ...form, date: e.target.value })}
+                          className="w-full px-4 py-3 bg-card border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="mono text-xs text-muted-foreground mb-1.5 block">Time</label>
+                        <input
+                          type="time"
+                          value={form.time}
+                          onChange={(e) => setForm({ ...form, time: e.target.value })}
+                          className="w-full px-4 py-3 bg-card border border-border rounded-xl text-sm text-foreground focus:outline-none focus:border-primary/50 transition-colors"
+                          required
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <label className="mono text-xs text-muted-foreground mb-1.5 block">Name</label>
                     <input
@@ -129,14 +215,16 @@ export default function ContactSection() {
                     />
                   </div>
                   <div>
-                    <label className="mono text-xs text-muted-foreground mb-1.5 block">Message</label>
+                    <label className="mono text-xs text-muted-foreground mb-1.5 block">
+                      {activeTab === "booking" ? "Notes (optional)" : "Message"}
+                    </label>
                     <textarea
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      placeholder="Tell me about your project..."
-                      rows={5}
+                      placeholder={activeTab === "booking" ? "Any details to prepare for our call?" : "Tell me about your project..."}
+                      rows={4}
                       className="w-full px-4 py-3 bg-card border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 transition-colors resize-none"
-                      required
+                      required={activeTab === "message"}
                     />
                   </div>
                   <button
@@ -145,9 +233,12 @@ export default function ContactSection() {
                     className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-3 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
                   >
                     {sending ? (
-                      <><Loader2 size={16} className="animate-spin" /> Sending...</>
+                      <><Loader2 size={16} className="animate-spin" /> {activeTab === "booking" ? "Requesting..." : "Sending..."}</>
                     ) : (
-                      <><Send size={16} /> Send Message</>
+                      <>
+                        {activeTab === "booking" ? <CalendarDays size={16} /> : <Send size={16} />} 
+                        {activeTab === "booking" ? "Request Booking" : "Send Message"}
+                      </>
                     )}
                   </button>
                 </form>
@@ -181,20 +272,20 @@ export default function ContactSection() {
                 </div>
                 <span className="mono text-sm">GitHub</span>
               </a>
-              <a
-                href={bookingLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group"
-                onClick={() => track("cta:book_call", { location: "contact_section" })}
+              <button
+                onClick={() => {
+                  setActiveTab("booking");
+                  track("cta:book_call", { location: "contact_section" });
+                }}
+                className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group text-left"
               >
                 <div className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center group-hover:border-primary/40 transition-colors">
                   <CalendarDays size={18} />
                 </div>
                 <span className="mono text-sm">Book a slot</span>
-              </a>
+              </button>
               <a
-                href={`mailto:${emailAddress}`}
+                href={`mailto:johnmatveyev@gmail.com`}
                 className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group"
                 onClick={() => track("cta:email", { location: "contact_section" })}
               >

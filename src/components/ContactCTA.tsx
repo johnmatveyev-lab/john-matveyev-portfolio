@@ -48,7 +48,7 @@ export default function ContactCTA() {
               Book a Call <ChevronRight className="w-5 h-5" />
             </a>
             <a
-              href="mailto:contact@matveyev.ai"
+              href="mailto:johnmatveyev@gmail.com"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-border text-foreground font-bold hover:border-primary/60 transition-all hover:scale-105 active:scale-95"
               onClick={() => track("cta:email", { location: "contact_cta" })}
             >

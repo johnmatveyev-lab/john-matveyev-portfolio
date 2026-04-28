@@ -7,6 +7,7 @@ const defaultProjects: Project[] = [
     id: "aim8",
     title: "AIM8.io",
     slug: "aim8",
+    liveUrl: "https://aim8.io",
     description: "Developing a cloud-native Virtual Studio Environment (VSE) capable of real-time multi-track audio generation via low-latency AI orchestration. Redefining professional music production workflows.",
     summary: "The first professional-grade AI DAW (Digital Audio Workstation) providing composer-level orchestration at the speed of thought.",
     thumbnailUrl: "/projects/aim8.png",
@@ -41,6 +42,7 @@ const defaultProjects: Project[] = [
     id: "quantumearth",
     title: "QuantumEarth",
     slug: "quantumearth",
+    liveUrl: "https://quantumearth.lovable.app",
     description: "Architected a high-fidelity geospatial intelligence platform leveraging decentralized compute to visualize real-time environmental data at planetary scale. Optimized LCP by 40% through custom tile-loading algorithms.",
     summary: "A next-generation environmental monitoring hub utilizing distributed AI to predict climate patterns with unprecedented precision.",
     thumbnailUrl: "/projects/quantumearth.png",
@@ -77,7 +79,7 @@ const defaultProjects: Project[] = [
     id: "createvibe",
     title: "CreateVibe",
     slug: "createvibe",
-    liveUrl: "https://createvibe.vercel.app",
+    liveUrl: "https://createdspaceai.vercel.app",
     description: "Full-scale generative media production platform orchestrating voice cloning, video synthesis, and text-to-image pipelines under unified auth.",
     thumbnailUrl: "/projects/createdspaceai.png",
     platform: "Vercel",
@@ -93,6 +95,7 @@ const defaultProjects: Project[] = [
     id: "prettyprivilegeai",
     title: "PrettyPrivilege AI",
     slug: "prettyprivilegeai",
+    liveUrl: "https://prettyprivilegeai.com",
     description: "Engineered a sophisticated Computer Vision pipeline utilizing Deep Metrics to deconstruct aesthetic patterns for brand strategy. Focus on bias-mitigation and high-accuracy detection.",
     summary: "Visual perception AI that analyzes the psychological impact of brand imagery on target demographics.",
     thumbnailUrl: "/projects/prettyprivilegeai.png",
@@ -129,6 +132,7 @@ const defaultProjects: Project[] = [
     id: "blueridgenanoseal",
     title: "Blue Ridge Nano Seal",
     slug: "blue-ridge-nano-seal",
+    liveUrl: "https://blueridgenanoseal.com",
     description: "Developed a mission-critical operations hub with automated CRM pipelines and RBAC dashboards for field service enterprise management.",
     thumbnailUrl: "/projects/blueridgenanoseal.png",
     platform: "React",
@@ -144,6 +148,7 @@ const defaultProjects: Project[] = [
     id: "speakgenie",
     title: "SpeakGenie",
     slug: "speakgenie",
+    liveUrl: "https://speakgenie.lovable.app",
     description: "Built a mission-critical telecom intelligence platform that provides real-time sentiment analysis and predictive escalation for enterprise call centers.",
     summary: "Real-time voice intelligence that identifies customer churn signals before the call ends.",
     thumbnailUrl: "/projects/speakgenie.png",
@@ -178,6 +183,7 @@ const defaultProjects: Project[] = [
     id: "currigiganalyzer",
     title: "CurriGigAnalyzer",
     slug: "currigiganalyzer",
+    liveUrl: "https://currigiganalyzer.com",
     description: "Financial modeling engine for gig-economy logistics. Transforms unstructured OCR data into predictive P&L statements for distributed workforces.",
     thumbnailUrl: "/projects/currigiganalyzer.png",
     platform: "Next.js",
@@ -193,6 +199,7 @@ const defaultProjects: Project[] = [
     id: "aim8video",
     title: "AIM8 Video",
     slug: "aim8-video",
+    liveUrl: "https://aim8-video.lovable.app",
     description: "Architected a generative video engine that synchronizes audio-reactive parameters with custom-trained Stable Video Diffusion models.",
     thumbnailUrl: "/projects/aim8video.png",
     platform: "Vercel",
@@ -241,7 +248,7 @@ const defaultProjects: Project[] = [
     id: "ugcgenerator",
     title: "UGC Generator",
     slug: "ugc-generator",
-    liveUrl: "https://ugc-generator.lovable.app",
+    liveUrl: "https://ugcgenerator.lovable.app",
     description: "A centralized platform empowering brands to seamlessly create, manage, and scale user-generated campaigns. Complete with creator tracking and analytics.",
     summary: "Automated UGC hub designed to streamline brand and creator collaborations.",
     thumbnailUrl: "/projects/ugcgenerator.png",
@@ -300,7 +307,18 @@ export const getProjects = async (): Promise<Project[]> => {
     technicalChallenges: p.technical_challenges || []
   }));
 
-  return [...defaultProjects, ...dbProjects];
+  if (data && data.length > 0) {
+    const dbSlugs = new Set(dbProjects.map((p: any) => p.slug));
+    const mergedProjects = [...dbProjects];
+    for (const dp of defaultProjects) {
+      if (!dbSlugs.has(dp.slug)) {
+        mergedProjects.push(dp);
+      }
+    }
+    return mergedProjects;
+  }
+
+  return defaultProjects;
 };
 
 export const getFeaturedProjects = async (): Promise<Project[]> => {
